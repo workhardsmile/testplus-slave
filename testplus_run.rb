@@ -79,13 +79,11 @@ end
 threads.each{|t| t.join}
 #####################################output######################################
 # ruby /tmp/testplus_projects/GitLab/commerce_adminui/run.rb
- # -e LV-REG 
+# -e LV-REG 
 # -p firefox 
-# -s /tmp/testplus_projects/GitLab/commerce_adminui
-# /test/commerce/regression/commerce_admin_ui_bug_tracking_t3560 
+# -s /tmp/testplus_projects/GitLab/commerce_adminui/test/commerce/regression/commerce_admin_ui_bug_tracking_t3560
 # -r 48600 
-# -o commerce_admin_ui_bug_tracking_t3560-48600-20160903014
-# 521.htm
+# -o commerce_admin_ui_bug_tracking_t3560-48600-20160903014521.htm
 # -j {"log":{"browser":"firefox","date_time":"2016-09-03 01:45:21","env":"LV-REG","round_id":48600,"script_name":"commerce_
 # admin_ui_bug_tracking_t3560","script_path":"GitLab/commerce_adminui/test/commerce/regression","file_name":"commerce_admin_ui_bug_
 # tracking_t3560-48600-20160903014521.htm"},"commit":"Create Log"}
