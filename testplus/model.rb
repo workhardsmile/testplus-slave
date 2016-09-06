@@ -1,9 +1,6 @@
 require 'active_record'
 require 'rest_client'
 
-require "#{File.dirname(__FILE__)}/logger"
-require "#{File.dirname(__FILE__)}/config"
-
 class ScriptTask
   attr_accessor :browser, :date_time, :env, :file_name, :round_id, :script_name, :script_path, :schedule_script
   def initialize(temp_schedule_script={})

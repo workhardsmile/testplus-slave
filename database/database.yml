@@ -1,19 +1,24 @@
 TESTPLUS:
   mysql:
+    adapter: mysql2
     host: 192.168.28.210
     database: testplus
     username: testplus
     password: testplus123
     encoding: utf8
-    timeout: 5000
+    reconnect: false
+    pool: 5
+    
 QA:
   mysql:
+    adapter: mysql2
     host: 192.168.28.218
     database: ironhide_staging
     username: ironhide
     password: ironhide_staging123!
     encoding: utf8
-    timeout: 5000
+    reconnect: false
+    pool: 5   
   redis:
     host: 192.168.28.218
     port: 6379

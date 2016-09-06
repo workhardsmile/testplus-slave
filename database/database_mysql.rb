@@ -13,7 +13,6 @@ class DatabaseMysql
     @envHash[:database]=db_config[env]['mysql']['database']
     @envHash[:encoding]= db_config[env]['mysql']['encoding']
     @envHash[:host]=db_config[env]['mysql']['host']
-    @envHash[:connect_timeout]=db_config[env]['mysql']['timeout']
     @client = Mysql2::Client.new(@envHash)
   end
 
