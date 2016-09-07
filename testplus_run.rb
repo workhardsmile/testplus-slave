@@ -31,7 +31,7 @@ $testplus_config['threads_number'].to_i.times.each do |i|
       end
       if $queue.empty? 
         # loop server
-        sleep(60)
+        sleep(30)
         next
         # single
         # ActiveRecord::Base.connection.close rescue false  
