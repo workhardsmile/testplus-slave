@@ -1,6 +1,6 @@
 slave_name: MacSlave-CD-01
-web_server: http://locahost:3000
-web_logserver: http://locahost:3001
+web_server: http://192.168.28.210
+web_logserver: http://192.168.28.210:8001
 threads_number: 1
 project: Demo
 local_ip: 192.168.29.227
