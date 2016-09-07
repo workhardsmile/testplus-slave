@@ -14,19 +14,18 @@ $testplus_config['threads_number'].to_i.times.each do |i|
     #until $queue.empty?
     while(true)
       if $queue.empty?
-        sleep(1) until database_util.free?
         $testplus_config['platforms'].each do |platform|
           database_util.query("call get_schedule_scripts_by_tnumber_and_project_and_platform(#{($testplus_config['threads_number'].to_i/$testplus_config['platforms'].length).to_i+1},'#{$testplus_config['project']}','#{platform['type']}','#{platform['version']}','#{$testplus_config['operation_system']['type']}','#{$testplus_config['operation_system']['version']}','#{$testplus_config['slave_name']}','#{$testplus_config['local_ip']}')")
-          mutex.lock        
-            temp_schedule_scripts = TempScheduleScript.find_all_by_project_name_and_platform_and_ip_and_deleted($testplus_config['project'],platform['type'],$testplus_config['local_ip'],0)
-            temp_schedule_scripts.each do |temp_schedule_script|
-              temp_schedule_script.deleted = 1
-              temp_schedule_script.save!
-              script_task = ScriptTask.new(temp_schedule_script)
-              $queue.push(script_task)
-              database_util.query("delete from temp_schedule_scripts where deleted=1")
-            end
-          mutex.unlock
+          #mutex.lock        
+          temp_schedule_scripts = TempScheduleScript.find_all_by_project_name_and_platform_and_ip_and_deleted($testplus_config['project'],platform['type'],$testplus_config['local_ip'],0)
+          temp_schedule_scripts.each do |temp_schedule_script|
+            temp_schedule_script.deleted = 1
+            temp_schedule_script.save!
+            script_task = ScriptTask.new(temp_schedule_script)
+            $queue.push(script_task)
+            database_util.query("delete from temp_schedule_scripts where deleted=1")
+          end
+          #mutex.unlock
         end        
       end
       if $queue.empty? 

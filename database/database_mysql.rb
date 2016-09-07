@@ -17,16 +17,17 @@ class DatabaseMysql
     @free = true
   end
   
-  def free?
-    @free == true
+  def wait_free
+    sleep(1) until @free    
   end
 
-  def query(sql,is_escaped = false)
-    @free = false
+  def query(sql,is_escaped = false)    
     puts sql
     result = []
     begin
       sql = @client.escape(sql) if is_escaped
+      wait_free 
+      @free = false
       result = @client.query(sql).to_a      
     rescue => e
       puts "error in execute_query -- #{sql} \n #{e.message}"
