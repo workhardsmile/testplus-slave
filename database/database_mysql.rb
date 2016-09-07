@@ -3,6 +3,7 @@ require 'mysql2'
 
 #require_relative '../../common/utilities/common.rb'
 class DatabaseMysql
+  attr_accessor :free
   def initialize(env)
     @envHash = Hash.new
     #get the database config from ../../data/database.yml by $env
@@ -16,26 +17,16 @@ class DatabaseMysql
     @client = Mysql2::Client.new(@envHash)
     @free = true
   end
-  
-  def wait_free
-    #sleep(1) until @free
-    while(@free==false) do
-      sleep(1)
-    end 
-  end
 
   def query(sql,is_escaped = false)    
     puts sql
     result = []
     begin
       sql = @client.escape(sql) if is_escaped
-      wait_free 
-      @free = false
       result = @client.query(sql).to_a      
     rescue => e
       puts "error in execute_query -- #{sql} \n #{e.message}"
     end
-    @free = true
     return result
   end
 
