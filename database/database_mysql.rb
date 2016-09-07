@@ -18,7 +18,10 @@ class DatabaseMysql
   end
   
   def wait_free
-    sleep(1) until @free    
+    #sleep(1) until @free
+    while(@free==false) do
+      sleep(1)
+    end 
   end
 
   def query(sql,is_escaped = false)    
@@ -32,7 +35,7 @@ class DatabaseMysql
     rescue => e
       puts "error in execute_query -- #{sql} \n #{e.message}"
     end
-    @free == true
+    @free = true
     return result
   end
 
