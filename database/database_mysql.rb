@@ -14,18 +14,25 @@ class DatabaseMysql
     @envHash[:encoding]= db_config[env]['mysql']['encoding']
     @envHash[:host]=db_config[env]['mysql']['host']
     @client = Mysql2::Client.new(@envHash)
+    @free = true
+  end
+  
+  def free?
+    @free == true
   end
 
   def query(sql,is_escaped = false)
+    @free = false
     puts sql
     result = []
     begin
       sql = @client.escape(sql) if is_escaped
-      result = @client.query(sql).to_a
-      return result
+      result = @client.query(sql).to_a      
     rescue => e
       puts "error in execute_query -- #{sql} \n #{e.message}"
     end
+    @free == true
+    return result
   end
 
   def close

@@ -7,26 +7,28 @@ $queue = Queue.new
 mutex=Mutex.new
 #threads number
 threads = []
+database_util = DatabaseMysql.new('TESTPLUS')
 $testplus_config['threads_number'].to_i.times.each do |i|
   threads<<Thread.new do
     puts "######Thread#{i}#######"
-    database_util = DatabaseMysql.new('TESTPLUS')
     #until $queue.empty?
     while(true)
       if $queue.empty?
+        sleep(1) until database_util.free?
         $testplus_config['platforms'].each do |platform|
           database_util.query("call get_schedule_scripts_by_tnumber_and_project_and_platform(#{($testplus_config['threads_number'].to_i/$testplus_config['platforms'].length).to_i+1},'#{$testplus_config['project']}','#{platform['type']}','#{platform['version']}','#{$testplus_config['operation_system']['type']}','#{$testplus_config['operation_system']['version']}','#{$testplus_config['slave_name']}','#{$testplus_config['local_ip']}')")
           mutex.lock        
-            temp_schedule_scripts = TempScheduleScript.find_all_by_project_name_and_platform_and_ip($testplus_config['project'],platform['type'],$testplus_config['local_ip'])
+            temp_schedule_scripts = TempScheduleScript.find_all_by_project_name_and_platform_and_ip_and_deleted($testplus_config['project'],platform['type'],$testplus_config['local_ip'],0)
             temp_schedule_scripts.each do |temp_schedule_script|
+              temp_schedule_script.deleted = 1
+              temp_schedule_script.save!
               script_task = ScriptTask.new(temp_schedule_script)
               $queue.push(script_task)
-              database_util.query("delete from temp_schedule_scripts where `id`=#{temp_schedule_script.id}")
+              database_util.query("delete from temp_schedule_scripts where deleted=1")
             end
           mutex.unlock
         end        
       end
-      sleep(1)
       if $queue.empty? 
         # loop server
         sleep(60)
@@ -55,7 +57,7 @@ $testplus_config['threads_number'].to_i.times.each do |i|
         local_path = File.join($testplus_config['root_path'],script_task.schedule_script.exec_path)
         testing_path = local_path.split('testing')[0]
         remote_path = JSON.parse(script_task.schedule_script.source_path)[0]["remote"]
-        start_cmd = "#{exec_cmd} #{File.join(testing_path,'testing','run.rb')} -e #{script_task.env} -p #{script_task.browser} -s #{File.join(local_path,script_task.script_name)} -r #{script_task.round_id} -o #{script_task.file_name}" #-j #{script_task.to_hash.to_json}"
+        start_cmd = "#{exec_cmd} #{File.join(testing_path,'testing','run.rb')} -e #{script_task.env} -p #{script_task.browser} -s #{File.join(local_path,script_task.script_name)} -r #{script_task.round_id} -o #{script_task.file_name} -j '#{script_task.to_hash.to_json}'"
         
         case script_task.schedule_script.source_cmd.downcase
         when 'git'
@@ -72,7 +74,7 @@ $testplus_config['threads_number'].to_i.times.each do |i|
           end
         end
         puts start_cmd
-        `#{start_cmd}`
+        puts `#{start_cmd}`
         #database_util.query("call update_script_result_status_by_script_result_id(#{script_task.schedule_script.script_result_id})")
       end
     end
