@@ -29,12 +29,12 @@ $testplus_config['threads_number'].to_i.times.each do |i|
       sleep(1)
       if $queue.empty? 
         # loop server
-        # sleep(60)
-        # next
+        sleep(60)
+        next
         # single
-        ActiveRecord::Base.connection.close rescue false  
-        database_util.close rescue false
-        break       
+        # ActiveRecord::Base.connection.close rescue false  
+        # database_util.close rescue false
+        # break       
       else
         script_task = $queue.pop
         exec_cmd = nil
@@ -55,23 +55,25 @@ $testplus_config['threads_number'].to_i.times.each do |i|
         local_path = File.join($testplus_config['root_path'],script_task.schedule_script.exec_path)
         testing_path = local_path.split('testing')[0]
         remote_path = JSON.parse(script_task.schedule_script.source_path)[0]["remote"]
-        start_cmd = "#{exec_cmd} #{File.join(testing_path,'testing','run.rb')} -e #{script_task.env} -p #{script_task.browser} -s #{File.join(local_path,script_task.script_name)} -r #{script_task.round_id} -o #{script_task.file_name} -j #{script_task.to_hash.to_json}"
-        database_util.query("call update_script_result_status_by_script_result_id(#{script_task.schedule_script.script_result_id})")
+        start_cmd = "#{exec_cmd} #{File.join(testing_path,'testing','run.rb')} -e #{script_task.env} -p #{script_task.browser} -s #{File.join(local_path,script_task.script_name)} -r #{script_task.round_id} -o #{script_task.file_name}" #-j #{script_task.to_hash.to_json}"
+        
         case script_task.schedule_script.source_cmd.downcase
         when 'git'
           unless File.exist?(local_path)            
-            puts "mkdir -p #{testing_path};git clone #{remote_path} #{testing_path}"
+            puts `mkdir -p #{testing_path};git clone #{remote_path} #{testing_path};cd testing_path&&bundle install`
           else
-            puts "cd #{local_path};git reset HEAD --hard;git update"
+            `cd #{local_path};git reset HEAD --hard;git pull&&bundle update`
           end
         when 'svn'
           unless File.exist?(local_path)
-            puts "mkdir -p #{local_path};svn checkout #{remote_path} #{testing_path}"
+            puts `mkdir -p #{local_path};svn checkout #{remote_path} #{testing_path};cd testing_path&&bundle install`
           else
-            puts "cd #{local_path};svn revert;svn update"
+            `cd #{local_path};svn revert;svn update&&bundle update`
           end
         end
-        puts "#{start_cmd}"
+        puts start_cmd
+        `#{start_cmd}`
+        #database_util.query("call update_script_result_status_by_script_result_id(#{script_task.schedule_script.script_result_id})")
       end
     end
   end
