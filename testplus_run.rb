@@ -4,41 +4,47 @@ require 'thread'
 Dir[File.dirname(__FILE__) + '/**/*.rb'].each {|file| require file if file!="./"<<__FILE__}
 #Dir[File.dirname(__FILE__) + '/library/*/**/*.rb'].each {|file| require file if file!="./"<<__FILE__}
 $queue = Queue.new
-mutex=Mutex.new
+$database_util = DatabaseMysql.new('TESTPLUS')
+$database_util.query("delete from temp_schedule_scripts where deleted=1")
+
+def get_push_queue
+  $database_util.free = false
+  $testplus_config['platforms'].each do |platform|
+    $database_util.query("call get_schedule_scripts_by_tnumber_and_project_and_platform(#{$testplus_config['threads_number'].to_i},'#{$testplus_config['project']}','#{platform['type']}','#{platform['version']}','#{$testplus_config['operation_system']['type']}','#{$testplus_config['operation_system']['version']}','#{$testplus_config['slave_name']}','#{$testplus_config['local_ip']}')")
+    temp_schedule_scripts = TempScheduleScript.find_all_by_project_name_and_platform_and_ip_and_deleted($testplus_config['project'],platform['type'],$testplus_config['local_ip'],0)
+    temp_schedule_scripts.each do |temp_schedule_script|
+      temp_schedule_script.deleted = 1
+      temp_schedule_script.save!
+      script_task = ScriptTask.new(temp_schedule_script)
+      $queue.push(script_task)
+    end
+  end
+  $database_util.free = true
+end
+
 #threads number
 threads = []
-database_util = DatabaseMysql.new('TESTPLUS')
+mutex=Mutex.new
 $testplus_config['threads_number'].to_i.times.each do |i|
   threads<<Thread.new do
-    puts "######Thread#{i}#######"
-    #until $queue.empty?
-    while(true)
+    loop do
+      puts "######Thread#{i}"
       if $queue.empty?
-        $testplus_config['platforms'].each do |platform|
-          sleep(1) until database_util.free
-          mutex.lock          
-          database_util.free = false
-          database_util.query("call get_schedule_scripts_by_tnumber_and_project_and_platform(#{$testplus_config['threads_number'].to_i},'#{$testplus_config['project']}','#{platform['type']}','#{platform['version']}','#{$testplus_config['operation_system']['type']}','#{$testplus_config['operation_system']['version']}','#{$testplus_config['slave_name']}','#{$testplus_config['local_ip']}')")
-          temp_schedule_scripts = TempScheduleScript.find_all_by_project_name_and_platform_and_ip_and_deleted($testplus_config['project'],platform['type'],$testplus_config['local_ip'],0)
-          temp_schedule_scripts.each do |temp_schedule_script|
-            temp_schedule_script.deleted = 1
-            temp_schedule_script.save!
-            script_task = ScriptTask.new(temp_schedule_script)
-            $queue.push(script_task)
-            database_util.query("delete from temp_schedule_scripts where deleted=1")
+        # single
+        # ActiveRecord::Base.connection.close rescue false
+        # $database_util.close rescue false
+        # break
+        mutex.synchronize do
+          if $database_util.free
+            get_push_queue
           end
-          database_util.free = true
-          mutex.unlock
+          # loop server
+          if $queue.empty?
+            sleep(30)
+            $database_util.free = true
+          end
         end
-      end
-      if $queue.empty?
-        # loop server
-        sleep(60)
-      next
-      # single
-      # ActiveRecord::Base.connection.close rescue false
-      # database_util.close rescue false
-      # break
+        next
       else
         script_task = $queue.pop
         exec_cmd = nil
@@ -75,14 +81,17 @@ $testplus_config['threads_number'].to_i.times.each do |i|
             `cd #{local_path};svn revert;svn update&&bundle update`
           end
         end
-        puts start_cmd
+        puts "######Thread#{i}\n#{start_cmd}"
         puts `#{start_cmd}`
-      #database_util.query("call update_script_result_status_by_script_result_id(#{script_task.schedule_script.script_result_id})")
+      #$database_util.query("call update_script_result_status_by_script_result_id(#{script_task.schedule_script.script_result_id})")
       end
     end
   end
 end
-threads.each{|t| t.join}
+
+loop do
+  threads.each{|t| t.join}
+end
 #####################################output######################################
 # ruby /tmp/testplus_projects/GitLab/commerce_adminui/run.rb
 # -e LV-REG
