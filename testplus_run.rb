@@ -4,25 +4,28 @@ require 'thread'
 Dir[File.dirname(__FILE__) + '/**/*.rb'].each {|file| require file if file!="./"<<__FILE__}
 #Dir[File.dirname(__FILE__) + '/library/*/**/*.rb'].each {|file| require file if file!="./"<<__FILE__}
 $queue = Queue.new
-$database_util = DatabaseMysql.new('TESTPLUS')
-$database_util.query("delete from temp_schedule_scripts where deleted=1")
+$global_status = true
 
 def get_push_queue
-  $database_util.free = false
-  $testplus_config['platforms'].each do |platform|
-    $database_util.query("call get_schedule_scripts_by_tnumber_and_project_and_platform(#{$testplus_config['threads_number'].to_i},'#{$testplus_config['project']}','#{platform['type']}','#{platform['version']}','#{$testplus_config['operation_system']['type']}','#{$testplus_config['operation_system']['version']}','#{$testplus_config['slave_name']}','#{$testplus_config['local_ip']}')")
-    temp_schedule_scripts = TempScheduleScript.find_all_by_project_name_and_platform_and_ip_and_deleted($testplus_config['project'],platform['type'],$testplus_config['local_ip'],0)
-    temp_schedule_scripts.each do |temp_schedule_script|
-      temp_schedule_script.deleted = 1
-      temp_schedule_script.save!
-      script_task = ScriptTask.new(temp_schedule_script)
-      $queue.push(script_task)
-    end
+  $global_status = false
+  #params[:salve_name],params[:platforms],params[:project_names],params[:threads_number].to_i,params[:operation_system]
+  data = {:salve_name=>$testplus_config['slave_name'],
+    :platforms=>$testplus_config['platforms'],
+    :project_names=>$testplus_config['project_names'],
+    :threads_number=>$testplus_config['threads_number'],
+    :operation_system=>$testplus_config['operation_system']}
+  url = "#{$testplus_config['web_server']}/get_schedule_scripts"
+  hash_results = JSON.parse(RestClient.post(url,data))
+  puts hash_results
+  (hash_results||[]).each do |hash_result|
+    temp_schedule_script = TempScheduleScript.new(hash_result)
+    script_task = ScriptTask.new(temp_schedule_script)
+    $queue.push(script_task)
   end
-  $database_util.free = true
+  $global_status = true
 end
 
-#threads number
+#threads
 threads = []
 mutex=Mutex.new
 $testplus_config['threads_number'].to_i.times.each do |i|
@@ -35,13 +38,13 @@ $testplus_config['threads_number'].to_i.times.each do |i|
         # $database_util.close rescue false
         # break
         mutex.synchronize do
-          if $database_util.free
+          if $global_status
             get_push_queue
           end
           # loop server
           if $queue.empty?
             sleep(30)
-            $database_util.free = true
+            $global_status = true
           end
         end
         next
@@ -83,7 +86,6 @@ $testplus_config['threads_number'].to_i.times.each do |i|
         end
         puts "######Thread#{i}\n#{start_cmd}"
         puts `#{start_cmd}`
-      #$database_util.query("call update_script_result_status_by_script_result_id(#{script_task.schedule_script.script_result_id})")
       end
     end
   end

@@ -1,7 +1,6 @@
 require 'yaml'
 require 'mysql2'
 
-#require_relative '../../common/utilities/common.rb'
 class DatabaseMysql
   attr_accessor :free
   def initialize(env)

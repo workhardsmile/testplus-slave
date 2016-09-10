@@ -1,9 +1,7 @@
 slave_name: MacSlave-CD-01
 web_server: http://192.168.28.210
-web_logserver: http://192.168.28.210:8001
 threads_number: 6
-project: IronHide
-local_ip: 192.168.29.227
+project_names: [IronHide]
 root_path: /tmp/testplus_projects
 operation_system:
    type: mac
