@@ -73,13 +73,13 @@ $testplus_config['threads_number'].to_i.times.each do |i|
         case script_task.schedule_script.source_cmd.downcase
         when 'git'
           unless File.exist?(local_path)
-            puts `mkdir -p #{testing_path};git clone #{remote_path} #{testing_path};cd testing_path&&bundle install`
+            puts `mkdir -p #{testing_path};git clone #{remote_path} #{testing_path};cd #{testing_path}&&bundle install`
           else
             `cd #{local_path};git reset HEAD --hard;git pull&&bundle update`
           end
         when 'svn'
           unless File.exist?(local_path)
-            puts `mkdir -p #{local_path};svn checkout #{remote_path} #{testing_path};cd testing_path&&bundle install`
+            puts `mkdir -p #{local_path};svn checkout #{remote_path} #{testing_path};cd #{testing_path}&&bundle install`
           else
             `cd #{local_path};svn revert;svn update&&bundle update`
           end
