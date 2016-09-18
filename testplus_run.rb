@@ -50,26 +50,36 @@ $testplus_config['threads_number'].to_i.times.each do |i|
         next
       else
         script_task = $queue.pop
-        exec_cmd = nil
-        case "#{script_task.schedule_script.exec_cmd}".downcase
-        when "rspec"||"ruby"
-          exec_cmd = "ruby"
-        when "maven"||"mvn"
-          exec_cmd = "mvn"
-        when "ant"
-          exec_cmd = "ant"
-        when "java"
-          exec_cmd = "java"
-        when "python"
-          exec_cmd = "python"
-        else
-        next
-        end
+        exec_cmd = start_cmd = nil
         local_path = File.join($testplus_config['root_path'],script_task.schedule_script.exec_path)
         testing_path = local_path.split('testing')[0]
         remote_path = JSON.parse(script_task.schedule_script.source_path)[0]["remote"]
-        start_cmd = "#{exec_cmd} #{File.join(testing_path,'testing','run.rb')} -e #{script_task.env} -p #{script_task.browser} -s #{File.join(local_path,script_task.script_name)} -r #{script_task.round_id} -o #{script_task.file_name} -j '#{script_task.to_hash.to_json}'"
-
+        case "#{script_task.schedule_script.exec_cmd}".downcase
+        when "rspec"
+          exec_cmd = "ruby"
+          start_cmd = "#{exec_cmd} #{File.join(testing_path,'testing','run.rb')} -e #{script_task.env} -p #{script_task.browser} -s #{File.join(local_path,script_task.script_name)} -r #{script_task.round_id} -o #{script_task.file_name} -j '#{script_task.to_hash.to_json}'"
+        when "ruby"
+          exec_cmd = "ruby"
+          start_cmd = "#{exec_cmd} #{File.join(testing_path,'testing','run.rb')} -e #{script_task.env} -p #{script_task.browser} -s #{File.join(local_path,script_task.script_name)} -r #{script_task.round_id} -o #{script_task.file_name} -j '#{script_task.to_hash.to_json}'"
+        when "python"
+          exec_cmd = "python"
+          start_cmd = "#{exec_cmd} #{File.join(testing_path,'main.py')} -e #{script_task.env} -p #{script_task.browser} -s #{File.join(local_path,"test_case",script_task.script_name)} -r #{script_task.round_id} -o #{script_task.file_name} -j '#{script_task.to_hash.to_json}'"
+        when "pyunit"
+          exec_cmd = "python"
+          start_cmd = "#{exec_cmd} #{File.join(testing_path,'main.py')} -e #{script_task.env} -p #{script_task.browser} -s #{File.join(local_path,"test_case",script_task.script_name)} -r #{script_task.round_id} -o #{script_task.file_name} -j '#{script_task.to_hash.to_json}'"
+        when "maven"||"mvn"
+          exec_cmd = "mvn"
+          start_cmd = "cd #{testing_path}&&mvn test"
+        when "ant"
+          exec_cmd = "ant"
+          start_cmd = "cd #{testing_path}&&ant"
+        when "java"
+          exec_cmd = "java"
+          start_cmd = ""
+        else
+        next
+        end
+        
         case script_task.schedule_script.source_cmd.downcase
         when 'git'
           unless File.exist?(local_path)
