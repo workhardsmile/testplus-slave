@@ -38,15 +38,12 @@ $testplus_config['threads_number'].to_i.times.each do |i|
         # ActiveRecord::Base.connection.close rescue false
         # $database_util.close rescue false
         # break
-        mutex.synchronize do
-          if $global_status
-            get_push_queue
-          end
-          # loop server
-          if $queue.empty?
-            sleep(30)
-            $global_status = true
-          end
+        mutex.synchronize { get_push_queue if $global_status}
+
+        # loop server
+        if $queue.empty?
+          sleep(30)
+          mutex.synchronize { $global_status = true }
         end
         next
       else
@@ -72,7 +69,7 @@ $testplus_config['threads_number'].to_i.times.each do |i|
           branch_name = "dev"
           start_cmd = "#{exec_cmd} #{File.join(testing_path,'testmain.py')} -e #{script_task.env} -p #{script_task.browser} -s #{File.join(local_path,script_task.script_name)} -r #{script_task.round_id} -o #{script_task.file_name} -j '#{script_task.to_hash.to_json}'"
         when "maven"||"mvn"
-          exec_cmd = "mvn"          
+          exec_cmd = "mvn"
           start_cmd = "cd #{testing_path}&&mvn test"
         when "ant"
           exec_cmd = "ant"
@@ -83,7 +80,7 @@ $testplus_config['threads_number'].to_i.times.each do |i|
         else
         next
         end
-        
+
         case script_task.schedule_script.source_cmd.downcase
         when 'git'
           unless File.exist?(local_path)
@@ -99,7 +96,7 @@ $testplus_config['threads_number'].to_i.times.each do |i|
           end
         end
         $logger.info "######Thread#{i}\n#{start_cmd}"
-        $logger.info `#{start_cmd}`
+      $logger.info `#{start_cmd}`
       end
     end
   end
