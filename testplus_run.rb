@@ -55,6 +55,7 @@ $testplus_config['threads_number'].to_i.times.each do |i|
         local_path = File.join($testplus_config['root_path'],script_task.schedule_script.exec_path)
         testing_path = local_path.split('testing')[0]
         remote_path = JSON.parse(script_task.schedule_script.source_path)[0]["remote"]
+        branch_name = "master"
         case "#{script_task.schedule_script.exec_cmd}".downcase
         when "rspec"
           exec_cmd = "ruby"
@@ -64,12 +65,14 @@ $testplus_config['threads_number'].to_i.times.each do |i|
           start_cmd = "#{exec_cmd} #{File.join(testing_path,'testing','run.rb')} -e #{script_task.env} -p #{script_task.browser} -s #{File.join(local_path,script_task.script_name)} -r #{script_task.round_id} -o #{script_task.file_name} -j '#{script_task.to_hash.to_json}'"
         when "python"
           exec_cmd = "python"
+          branch_name = "dev"
           start_cmd = "#{exec_cmd} #{File.join(testing_path,'testmain.py')} -e #{script_task.env} -p #{script_task.browser} -s #{File.join(local_path,script_task.script_name)} -r #{script_task.round_id} -o #{script_task.file_name} -j '#{script_task.to_hash.to_json}'"
         when "pyunit"
           exec_cmd = "python"
+          branch_name = "dev"
           start_cmd = "#{exec_cmd} #{File.join(testing_path,'testmain.py')} -e #{script_task.env} -p #{script_task.browser} -s #{File.join(local_path,script_task.script_name)} -r #{script_task.round_id} -o #{script_task.file_name} -j '#{script_task.to_hash.to_json}'"
         when "maven"||"mvn"
-          exec_cmd = "mvn"
+          exec_cmd = "mvn"          
           start_cmd = "cd #{testing_path}&&mvn test"
         when "ant"
           exec_cmd = "ant"
@@ -84,7 +87,7 @@ $testplus_config['threads_number'].to_i.times.each do |i|
         case script_task.schedule_script.source_cmd.downcase
         when 'git'
           unless File.exist?(local_path)
-            $logger.info `mkdir -p #{testing_path};git clone #{remote_path} #{testing_path};cd #{testing_path}&&bundle install`
+            $logger.info `mkdir -p #{testing_path};git clone #{remote_path} #{testing_path};cd #{testing_path}&&git checkout #{branch_name}&&bundle install`
           else
             `cd #{local_path};git reset HEAD --hard;git pull&&bundle update`
           end
