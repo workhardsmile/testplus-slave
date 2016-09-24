@@ -39,7 +39,7 @@ $testplus_config['threads_number'].to_i.times.each do |i|
         # $database_util.close rescue false
         # break
         mutex.synchronize do
-          get_push_queue if $global_status
+          (get_push_queue rescue ($global_status = true)) if $global_status
           # loop server
           if $queue.empty? && $global_status
             sleep(30)
