@@ -5,7 +5,7 @@ Dir[File.dirname(__FILE__) + '/**/*.rb'].each {|file| require file if file!="./"
 #Dir[File.dirname(__FILE__) + '/library/*/**/*.rb'].each {|file| require file if file!="./"<<__FILE__}
 $logger = Testplus::Log.new("#{File.dirname(__FILE__)}/log/testplus-slave-#{Time.now.strftime("%Y-%m-%d")}.log")
 $queue = Queue.new
-$global_status = $source_status = true
+$global_status = true
 
 def get_push_queue
   $global_status = false
@@ -43,10 +43,11 @@ $testplus_config['threads_number'].to_i.times.each do |i|
           # loop server
           if $queue.empty? && $global_status
             sleep(30)
-            $global_status = true
+          $global_status = true
           end
         end
-        next
+        sleep(3)
+      next
       else
         script_task = $queue.pop
         exec_cmd = start_cmd = nil
@@ -81,33 +82,29 @@ $testplus_config['threads_number'].to_i.times.each do |i|
         else
         next
         end
-        
-        mutex.synchronize do
-          sleep(1) until $source_status
-          $source_status = false
-          begin 
-            case script_task.schedule_script.source_cmd.downcase
-            when 'git'
-              unless File.exist?(local_path)
-                $logger.info `mkdir -p #{testing_path};git clone #{remote_path} #{testing_path};cd #{testing_path}&&git checkout #{branch_name}&&bundle install`
-              else
-                `cd #{local_path};git reset HEAD --hard;git pull&&bundle update`
-              end
-            when 'svn'
-              unless File.exist?(local_path)
-                $logger.info `mkdir -p #{local_path};svn checkout #{remote_path} #{testing_path};cd #{testing_path}&&bundle install`
-              else
-                `cd #{local_path};svn revert;svn update&&bundle update`
-              end
+
+        begin
+          case script_task.schedule_script.source_cmd.downcase
+          when 'git'
+            unless File.exist?(local_path)
+              $logger.info `mkdir -p #{testing_path};git clone #{remote_path} #{testing_path};cd #{testing_path}&&git checkout #{branch_name}&&bundle install`
+            else
+              `cd #{local_path};git reset HEAD --hard;git pull&&bundle update`
             end
-          rescue => e
-            $logger.info "Exception: #{e}"
+          when 'svn'
+            unless File.exist?(local_path)
+              $logger.info `mkdir -p #{local_path};svn checkout #{remote_path} #{testing_path};cd #{testing_path}&&bundle install`
+            else
+              `cd #{local_path};svn revert;svn update&&bundle update`
+            end
           end
-          $source_status = true
+        rescue => e
+          $logger.info "Exception: #{e}"
+          sleep(3)
         end
-        
+
         $logger.info "######Thread#{i}\n#{start_cmd}"
-        $logger.info `#{start_cmd}`
+      $logger.info `#{start_cmd}`
       end
     end
   end
