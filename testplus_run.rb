@@ -3,6 +3,7 @@ require 'thread'
 
 Dir[File.dirname(__FILE__) + '/**/*.rb'].each {|file| require file if file!="./"<<__FILE__}
 #Dir[File.dirname(__FILE__) + '/library/*/**/*.rb'].each {|file| require file if file!="./"<<__FILE__}
+$logger = Testplus::Log.new("#{File.dirname(__FILE__)}/log/testplus-slave-#{Time.now.strftime("%Y-%m-%d")}.log")
 $queue = Queue.new
 $global_status = true
 
@@ -16,7 +17,7 @@ def get_push_queue
     :operation_system=>$testplus_config['operation_system']}
   url = "#{$testplus_config['web_server']}/get_schedule_scripts"
   hash_results = JSON.parse(RestClient.post(url,data))
-  puts hash_results
+  $logger.info hash_results
   (hash_results||[]).each do |hash_result|
     temp_schedule_script = TempScheduleScript.new(hash_result)
     script_task = ScriptTask.new(temp_schedule_script)
@@ -31,7 +32,7 @@ mutex=Mutex.new
 $testplus_config['threads_number'].to_i.times.each do |i|
   threads<<Thread.new do
     loop do
-      puts "######Thread#{i}"
+      $logger.info "######Thread#{i}"
       if $queue.empty?
         # single
         # ActiveRecord::Base.connection.close rescue false
@@ -63,10 +64,10 @@ $testplus_config['threads_number'].to_i.times.each do |i|
           start_cmd = "#{exec_cmd} #{File.join(testing_path,'testing','run.rb')} -e #{script_task.env} -p #{script_task.browser} -s #{File.join(local_path,script_task.script_name)} -r #{script_task.round_id} -o #{script_task.file_name} -j '#{script_task.to_hash.to_json}'"
         when "python"
           exec_cmd = "python"
-          start_cmd = "#{exec_cmd} #{File.join(testing_path,'main.py')} -e #{script_task.env} -p #{script_task.browser} -s #{File.join(local_path,"test_case",script_task.script_name)} -r #{script_task.round_id} -o #{script_task.file_name} -j '#{script_task.to_hash.to_json}'"
+          start_cmd = "#{exec_cmd} #{File.join(testing_path,'testmain.py')} -e #{script_task.env} -p #{script_task.browser} -s #{File.join(local_path,script_task.script_name)} -r #{script_task.round_id} -o #{script_task.file_name} -j '#{script_task.to_hash.to_json}'"
         when "pyunit"
           exec_cmd = "python"
-          start_cmd = "#{exec_cmd} #{File.join(testing_path,'main.py')} -e #{script_task.env} -p #{script_task.browser} -s #{File.join(local_path,"test_case",script_task.script_name)} -r #{script_task.round_id} -o #{script_task.file_name} -j '#{script_task.to_hash.to_json}'"
+          start_cmd = "#{exec_cmd} #{File.join(testing_path,'testmain.py')} -e #{script_task.env} -p #{script_task.browser} -s #{File.join(local_path,script_task.script_name)} -r #{script_task.round_id} -o #{script_task.file_name} -j '#{script_task.to_hash.to_json}'"
         when "maven"||"mvn"
           exec_cmd = "mvn"
           start_cmd = "cd #{testing_path}&&mvn test"
@@ -83,19 +84,19 @@ $testplus_config['threads_number'].to_i.times.each do |i|
         case script_task.schedule_script.source_cmd.downcase
         when 'git'
           unless File.exist?(local_path)
-            puts `mkdir -p #{testing_path};git clone #{remote_path} #{testing_path};cd #{testing_path}&&bundle install`
+            $logger.info `mkdir -p #{testing_path};git clone #{remote_path} #{testing_path};cd #{testing_path}&&bundle install`
           else
             `cd #{local_path};git reset HEAD --hard;git pull&&bundle update`
           end
         when 'svn'
           unless File.exist?(local_path)
-            puts `mkdir -p #{local_path};svn checkout #{remote_path} #{testing_path};cd #{testing_path}&&bundle install`
+            $logger.info `mkdir -p #{local_path};svn checkout #{remote_path} #{testing_path};cd #{testing_path}&&bundle install`
           else
             `cd #{local_path};svn revert;svn update&&bundle update`
           end
         end
-        puts "######Thread#{i}\n#{start_cmd}"
-        puts `#{start_cmd}`
+        $logger.info "######Thread#{i}\n#{start_cmd}"
+        $logger.info `#{start_cmd}`
       end
     end
   end
