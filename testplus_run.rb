@@ -5,7 +5,7 @@ Dir[File.dirname(__FILE__) + '/**/*.rb'].each {|file| require file if file!="./"
 #Dir[File.dirname(__FILE__) + '/library/*/**/*.rb'].each {|file| require file if file!="./"<<__FILE__}
 $logger = Testplus::Log.new("#{File.dirname(__FILE__)}/log/testplus-slave-#{Time.now.strftime("%Y-%m-%d")}.log")
 $queue = Queue.new
-$global_status = true
+$global_status = $source_status = true
 
 def get_push_queue
   $global_status = false
@@ -38,12 +38,13 @@ $testplus_config['threads_number'].to_i.times.each do |i|
         # ActiveRecord::Base.connection.close rescue false
         # $database_util.close rescue false
         # break
-        mutex.synchronize { get_push_queue if $global_status}
-
-        # loop server
-        if $queue.empty?
-          sleep(30)
-          mutex.synchronize { $global_status = true }
+        mutex.synchronize do
+          get_push_queue if $global_status
+          # loop server
+          if $queue.empty? && $global_status
+            sleep(30)
+            $global_status = true
+          end
         end
         next
       else
@@ -80,23 +81,29 @@ $testplus_config['threads_number'].to_i.times.each do |i|
         else
         next
         end
-
-        case script_task.schedule_script.source_cmd.downcase
-        when 'git'
-          unless File.exist?(local_path)
-            $logger.info `mkdir -p #{testing_path};git clone #{remote_path} #{testing_path};cd #{testing_path}&&git checkout #{branch_name}&&bundle install`
-          else
-            `cd #{local_path};git reset HEAD --hard;git pull&&bundle update`
+        
+        mutex.synchronize do
+          sleep(1) until $source_status
+          $source_status = false
+          case script_task.schedule_script.source_cmd.downcase
+          when 'git'
+            unless File.exist?(local_path)
+              $logger.info `mkdir -p #{testing_path};git clone #{remote_path} #{testing_path};cd #{testing_path}&&git checkout #{branch_name}&&bundle install`
+            else
+              `cd #{local_path};git reset HEAD --hard;git pull&&bundle update` rescue false
+            end
+          when 'svn'
+            unless File.exist?(local_path)
+              $logger.info `mkdir -p #{local_path};svn checkout #{remote_path} #{testing_path};cd #{testing_path}&&bundle install`
+            else
+              `cd #{local_path};svn revert;svn update&&bundle update` rescue false
+            end
           end
-        when 'svn'
-          unless File.exist?(local_path)
-            $logger.info `mkdir -p #{local_path};svn checkout #{remote_path} #{testing_path};cd #{testing_path}&&bundle install`
-          else
-            `cd #{local_path};svn revert;svn update&&bundle update`
-          end
+          $source_status = true
         end
+        
         $logger.info "######Thread#{i}\n#{start_cmd}"
-      $logger.info `#{start_cmd}`
+        $logger.info `#{start_cmd}`
       end
     end
   end
