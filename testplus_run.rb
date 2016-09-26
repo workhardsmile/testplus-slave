@@ -89,7 +89,7 @@ $testplus_config['threads_number'].to_i.times.each do |i|
             unless File.exist?(local_path)
               $logger.info `mkdir -p #{testing_path};git clone #{remote_path} #{testing_path};cd #{testing_path}&&git checkout #{branch_name}&&bundle install`
             else
-              `cd #{local_path};git reset HEAD --hard;git pull&&bundle update`
+              `cd #{local_path}&&git checkout #{branch_name};git reset HEAD --hard;git pull origin #{branch_name}&&bundle update`
             end
           when 'svn'
             unless File.exist?(local_path)
