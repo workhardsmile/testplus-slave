@@ -51,25 +51,26 @@ $testplus_config['threads_number'].to_i.times.each do |i|
       else
         script_task = $queue.pop
         exec_cmd = start_cmd = nil
-        local_path = File.join($testplus_config['root_path'],script_task.schedule_script.exec_path)
-        testing_path = local_path.split('testing')[0]
-        remote_path = JSON.parse(script_task.schedule_script.source_path)[0]["remote"]
+        testing_path = File.join($testplus_config['root_path'],script_task.schedule_script.exec_path)
+        source_path = JSON.parse(script_task.schedule_script.source_path)[0] rescue {}
+        local_path = File.join($testplus_config['root_path'],source_path["local"]) #testing_path.split('testing')[0].split('interface')[0]
+        remote_path = source_path["remote"]
         branch_name = "master"
         case "#{script_task.schedule_script.exec_cmd}".downcase
         when "rspec"
           exec_cmd = "ruby"
-          start_cmd = "#{exec_cmd} #{File.join(testing_path,'testing','run.rb')} -e #{script_task.env} -p #{script_task.browser} -s #{File.join(local_path,script_task.script_name)} -r #{script_task.round_id} -o #{script_task.file_name} -j '#{script_task.to_hash.to_json}'"
+          start_cmd = "#{exec_cmd} #{File.join(testing_path,'run.rb')} -e #{script_task.env} -p #{script_task.browser} -s #{File.join(testing_path,script_task.script_name)} -r #{script_task.round_id} -o #{script_task.file_name} -j '#{script_task.to_hash.to_json}'"
         when "ruby"
           exec_cmd = "ruby"
-          start_cmd = "#{exec_cmd} #{File.join(testing_path,'testing','run.rb')} -e #{script_task.env} -p #{script_task.browser} -s #{File.join(local_path,script_task.script_name)} -r #{script_task.round_id} -o #{script_task.file_name} -j '#{script_task.to_hash.to_json}'"
+          start_cmd = "#{exec_cmd} #{File.join(testing_path,'run.rb')} -e #{script_task.env} -p #{script_task.browser} -s #{File.join(testing_path,script_task.script_name)} -r #{script_task.round_id} -o #{script_task.file_name} -j '#{script_task.to_hash.to_json}'"
         when "python"
           exec_cmd = "python"
           branch_name = "dev"
-          start_cmd = "#{exec_cmd} #{File.join(testing_path,'testmain.py')} -e #{script_task.env} -p #{script_task.browser} -s #{File.join(local_path,script_task.script_name)} -r #{script_task.round_id} -o #{script_task.file_name} -j '#{script_task.to_hash.to_json}'"
+          start_cmd = "#{exec_cmd} #{File.join(testing_path,'testmain.py')} -e #{script_task.env} -p #{script_task.browser} -s #{File.join(testing_path,script_task.script_name)} -r #{script_task.round_id} -o #{script_task.file_name} -j '#{script_task.to_hash.to_json}'"
         when "pyunit"
           exec_cmd = "python"
           branch_name = "dev"
-          start_cmd = "#{exec_cmd} #{File.join(testing_path,'testmain.py')} -e #{script_task.env} -p #{script_task.browser} -s #{File.join(local_path,script_task.script_name)} -r #{script_task.round_id} -o #{script_task.file_name} -j '#{script_task.to_hash.to_json}'"
+          start_cmd = "#{exec_cmd} #{File.join(testing_path,'testmain.py')} -e #{script_task.env} -p #{script_task.browser} -s #{File.join(testing_path,script_task.script_name)} -r #{script_task.round_id} -o #{script_task.file_name} -j '#{script_task.to_hash.to_json}'"
         when "maven"||"mvn"
           exec_cmd = "mvn"
           start_cmd = "cd #{testing_path}&&mvn test"
@@ -87,15 +88,19 @@ $testplus_config['threads_number'].to_i.times.each do |i|
           case script_task.schedule_script.source_cmd.downcase
           when 'git'
             unless File.exist?(local_path)
-              $logger.info `mkdir -p #{testing_path};git clone #{remote_path} #{testing_path};cd #{testing_path}&&git checkout #{branch_name}&&bundle install`
+              extra_cmd = '&&bundle install' if exec_cmd == 'ruby'
+              $logger.info `mkdir -p #{local_path};git clone #{remote_path} #{local_path}&&cd #{local_path}&&git checkout #{branch_name}#{extra_cmd}`
             else
-              `cd #{local_path}&&git checkout #{branch_name};git reset HEAD --hard;git pull&&bundle update`
+              extra_cmd = '&&bundle update' if exec_cmd == 'ruby'
+              `cd #{local_path}&&git checkout #{branch_name};git reset HEAD --hard;git pull#{extra_cmd}`
             end
           when 'svn'
             unless File.exist?(local_path)
-              $logger.info `mkdir -p #{local_path};svn checkout #{remote_path} #{testing_path};cd #{testing_path}&&bundle install`
+              extra_cmd = '&&bundle install' if exec_cmd == 'ruby'
+              $logger.info `mkdir -p #{local_path};svn checkout #{remote_path} #{local_path}&&cd #{local_path}#{extra_cmd}`
             else
-              `cd #{local_path};svn revert;svn update&&bundle update`
+              extra_cmd = '&&bundle update' if exec_cmd == 'ruby'
+              `cd #{local_path};svn revert;svn update#{extra_cmd}`
             end
           end
         rescue => e
