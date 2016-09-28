@@ -93,7 +93,7 @@ $testplus_config['threads_number'].to_i.times.each do |i|
               extra_cmd = "mkdir -p #{local_path};git clone #{remote_path} #{local_path}&&cd #{local_path}&&git checkout #{branch_name}#{extra_cmd}"              
             else
               extra_cmd = '&&bundle update' if exec_cmd == 'ruby'
-              extra_cmd = "cd #{local_path}&&git checkout #{branch_name};git pull#{extra_cmd}"
+              extra_cmd = "cd #{local_path}&&git checkout #{branch_name};git reset HEAD --hard;git pull#{extra_cmd}"
             end
           when 'svn'
             unless File.exist?(local_path)
@@ -101,7 +101,7 @@ $testplus_config['threads_number'].to_i.times.each do |i|
               extra_cmd = "mkdir -p #{local_path};svn checkout #{remote_path} #{local_path}&&cd #{local_path}#{extra_cmd}"
             else
               extra_cmd = '&&bundle update' if exec_cmd == 'ruby'
-              extra_cmd = "cd #{local_path};svn update#{extra_cmd}"
+              extra_cmd = "cd #{local_path};svn revert;svn update#{extra_cmd}"
             end
           end
           $logger.info "Execute CMD: #{extra_cmd}"
