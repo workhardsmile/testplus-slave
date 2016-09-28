@@ -85,26 +85,29 @@ $testplus_config['threads_number'].to_i.times.each do |i|
         end
 
         begin
+          extra_cmd = nil
           case script_task.schedule_script.source_cmd.downcase
           when 'git'
             unless File.exist?(local_path)
               extra_cmd = '&&bundle install' if exec_cmd == 'ruby'
-              $logger.info `mkdir -p #{local_path};git clone #{remote_path} #{local_path}&&cd #{local_path}&&git checkout #{branch_name}#{extra_cmd}`
+              extra_cmd = "mkdir -p #{local_path};git clone #{remote_path} #{local_path}&&cd #{local_path}&&git checkout #{branch_name}#{extra_cmd}"              
             else
               extra_cmd = '&&bundle update' if exec_cmd == 'ruby'
-              `cd #{local_path}&&git checkout #{branch_name};git reset HEAD --hard;git pull#{extra_cmd}`
+              extra_cmd = "cd #{local_path}&&git checkout #{branch_name};git reset HEAD --hard;git pull#{extra_cmd}"
             end
           when 'svn'
             unless File.exist?(local_path)
               extra_cmd = '&&bundle install' if exec_cmd == 'ruby'
-              $logger.info `mkdir -p #{local_path};svn checkout #{remote_path} #{local_path}&&cd #{local_path}#{extra_cmd}`
+              extra_cmd = "mkdir -p #{local_path};svn checkout #{remote_path} #{local_path}&&cd #{local_path}#{extra_cmd}"
             else
               extra_cmd = '&&bundle update' if exec_cmd == 'ruby'
-              `cd #{local_path};svn revert;svn update#{extra_cmd}`
+              extra_cmd = "cd #{local_path};svn revert;svn update#{extra_cmd}"
             end
           end
+          $logger.info "Execute CMD: #{extra_cmd}"
+          $logger.info `#{extra_cmd}` unless extra_cmd.nil?
         rescue => e
-          $logger.info "Exception: #{e}"
+          $logger.info "Source Control Exception: #{e}"
           sleep(3)
         end
 
