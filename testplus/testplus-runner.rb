@@ -17,8 +17,8 @@ optparse = OptionParser.new do|opts|
   
   #define environment option
   options[:environment] = 'QA'
-  opts.on('-e', '--environment <string>', ["QA","REG", "PROD"],
-  'Name of the test environment (optinal)','ex - "QA","REG", "PROD"','Set to QA by default') do|environment|
+  opts.on('-e', '--environment <string>', ["QA","STG","REG", "PROD"],
+  'Name of the test environment (optinal)','ex - "QA","STG","REG", "PROD"','Set to QA by default') do|environment|
     options[:environment] = environment
   end
   
