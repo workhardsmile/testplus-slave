@@ -94,7 +94,7 @@ $testplus_config['threads_number'].to_i.times.each do |i|
               extra_cmd = "mkdir -p #{local_path};git clone #{remote_path} #{local_path}&&cd #{local_path}&&git checkout #{branch_name}#{extra_cmd}"              
             else
               extra_cmd = '&&bundle update' if exec_cmd == 'ruby'
-              extra_cmd = "cd #{local_path}&&git checkout #{branch_name} -f;git reset HEAD --hard;git pull#{extra_cmd}"
+              extra_cmd = "cd #{local_path}&&git checkout .;git checkout #{branch_name};git pull#{extra_cmd}"
             end
           when 'svn'
             unless File.exist?(local_path)
