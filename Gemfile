@@ -1,6 +1,6 @@
 # Gemfile
 #source "https://rubygems.org"
-source 'https://ruby.taobao.org'
+source "http://gems.ruby-china.org"
 
 gem "digest"
 gem "mysql2","~>0.3.21"

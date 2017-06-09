@@ -53,7 +53,8 @@ $testplus_config['threads_number'].to_i.times.each do |i|
         exec_cmd = start_cmd = nil
         testing_path = File.join($testplus_config['root_path'],script_task.schedule_script.exec_path)
         source_path = JSON.parse(script_task.schedule_script.source_path)[0] rescue {}
-        local_path = File.join($testplus_config['root_path'],source_path["local"]) #testing_path.split('testing')[0].split('interface')[0]
+        #testing_path.split('testing')[0].split('interface')[0]
+        local_path = File.absolute_path(File.join($testplus_config['root_path'],source_path["local"])).gsub(File::SEPARATOR, File::ALT_SEPARATOR || File::SEPARATOR)
         remote_path = source_path["remote"]
         branch_name = "master"
         case "#{script_task.schedule_script.exec_cmd}".downcase
