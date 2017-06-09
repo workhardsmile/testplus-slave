@@ -11,6 +11,7 @@ def get_push_queue
   $global_status = false
   #params[:salve_name],params[:platforms],params[:project_names],params[:threads_number].to_i,params[:operation_system]
   data = {:salve_name=>$testplus_config['slave_name'],
+    :ip=>$testplus_config['ip_addr'],
     :platforms=>$testplus_config['platforms'],
     :project_names=>$testplus_config['project_names'],
     :threads_number=>$testplus_config['threads_number'],
