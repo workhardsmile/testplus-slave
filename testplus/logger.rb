@@ -26,7 +26,7 @@ module Testplus
 
     def log(level, data)
       if @log && level <= @level
-        data += "\n" if /\n\Z/ !~ data
+        data += "\n" if (/\n\Z/ !~ data rescue true)
         @log << data
       end
     end
