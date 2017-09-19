@@ -1,0 +1,22 @@
+# Gemfile
+#source "https://rubygems.org"
+source "http://gems.ruby-china.org"
+
+gem "rspec", "~>3.5.0"
+gem "digest"
+gem "mysql2","~>0.3.21"
+gem "redis"
+gem "uuidtools"
+gem "parallel_tests"
+#gem "rspec-parallel"
+gem "coderay"
+gem "addressable"
+gem 'selenium-webdriver', '~>2.49.0'
+gem "rest-client", "~> 2.0.0"
+gem 'pry', '~>0.10.3'
+gem 'pry-byebug'
+gem 'activerecord', '3.2.6',:require => 'active_record'
+gem 'daemons'
+gem 'json', '~>1.8.6'
+gem 'appium_lib', '~>8.0.2'
+gem 'mongo'

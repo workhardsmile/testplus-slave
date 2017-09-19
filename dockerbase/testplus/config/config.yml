@@ -1,0 +1,23 @@
+slave_name: CentOsSlave-CD-01
+ip_addr: 10.4.237.142
+web_server: http://10.4.237.142:8000
+threads_number: 3
+project_names: [IronHide]
+root_path: /slave/projects
+operation_system:
+   type: mac
+   version: 10.11
+platforms:
+-  type: firefox
+   version: latest
+   execute_cmd: firefox
+-  type: chrome
+   version: latest
+   execute_cmd: chrome
+-  type: android
+   version: latest
+   execute_cmd: appium
+-  type: iphone
+   version: latest
+   execute_cmd: appium
+   

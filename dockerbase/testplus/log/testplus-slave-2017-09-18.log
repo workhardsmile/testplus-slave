@@ -1,0 +1,107 @@
+[2017-09-18 19:28:31] INFO ######Thread2
+[2017-09-18 19:28:31] INFO http://10.4.237.142:8000/get_schedule_scripts
+{:salve_name=>"CentOsSlave-CD-01", :ip=>"10.4.237.142", :platforms=>[{"type"=>"firefox", "version"=>"latest", "execute_cmd"=>"firefox"}, {"type"=>"chrome", "version"=>"latest", "execute_cmd"=>"chrome"}], :project_names=>["IronHide"], :threads_number=>3, :operation_system=>{"type"=>"mac", "version"=>10.11}}
+[2017-09-18 19:28:31] INFO ######Thread1
+[2017-09-18 19:28:31] INFO ######Thread0
+[2017-09-18 19:28:35] INFO ######Thread2
+[2017-09-18 19:28:35] INFO http://10.4.237.142:8000/get_schedule_scripts
+{:salve_name=>"CentOsSlave-CD-01", :ip=>"10.4.237.142", :platforms=>[{"type"=>"firefox", "version"=>"latest", "execute_cmd"=>"firefox"}, {"type"=>"chrome", "version"=>"latest", "execute_cmd"=>"chrome"}], :project_names=>["IronHide"], :threads_number=>3, :operation_system=>{"type"=>"mac", "version"=>10.11}}
+[2017-09-18 19:28:35] INFO ######Thread1
+[2017-09-18 19:28:35] INFO ######Thread0
+[2017-09-18 19:29:05] INFO http://10.4.237.142:8000/get_schedule_scripts
+{:salve_name=>"CentOsSlave-CD-01", :ip=>"10.4.237.142", :platforms=>[{"type"=>"firefox", "version"=>"latest", "execute_cmd"=>"firefox"}, {"type"=>"chrome", "version"=>"latest", "execute_cmd"=>"chrome"}], :project_names=>["IronHide"], :threads_number=>3, :operation_system=>{"type"=>"mac", "version"=>10.11}}
+[2017-09-18 19:29:08] INFO ######Thread2
+[2017-09-18 19:29:35] INFO http://10.4.237.142:8000/get_schedule_scripts
+{:salve_name=>"CentOsSlave-CD-01", :ip=>"10.4.237.142", :platforms=>[{"type"=>"firefox", "version"=>"latest", "execute_cmd"=>"firefox"}, {"type"=>"chrome", "version"=>"latest", "execute_cmd"=>"chrome"}], :project_names=>["IronHide"], :threads_number=>3, :operation_system=>{"type"=>"mac", "version"=>10.11}}
+[2017-09-18 19:29:38] INFO ######Thread1
+[2017-09-18 19:30:05] INFO http://10.4.237.142:8000/get_schedule_scripts
+{:salve_name=>"CentOsSlave-CD-01", :ip=>"10.4.237.142", :platforms=>[{"type"=>"firefox", "version"=>"latest", "execute_cmd"=>"firefox"}, {"type"=>"chrome", "version"=>"latest", "execute_cmd"=>"chrome"}], :project_names=>["IronHide"], :threads_number=>3, :operation_system=>{"type"=>"mac", "version"=>10.11}}
+[2017-09-18 19:30:08] INFO ######Thread0
+[2017-09-18 19:30:35] INFO http://10.4.237.142:8000/get_schedule_scripts
+{:salve_name=>"CentOsSlave-CD-01", :ip=>"10.4.237.142", :platforms=>[{"type"=>"firefox", "version"=>"latest", "execute_cmd"=>"firefox"}, {"type"=>"chrome", "version"=>"latest", "execute_cmd"=>"chrome"}], :project_names=>["IronHide"], :threads_number=>3, :operation_system=>{"type"=>"mac", "version"=>10.11}}
+[2017-09-18 19:30:38] INFO ######Thread2
+[2017-09-18 19:31:05] INFO http://10.4.237.142:8000/get_schedule_scripts
+{:salve_name=>"CentOsSlave-CD-01", :ip=>"10.4.237.142", :platforms=>[{"type"=>"firefox", "version"=>"latest", "execute_cmd"=>"firefox"}, {"type"=>"chrome", "version"=>"latest", "execute_cmd"=>"chrome"}], :project_names=>["IronHide"], :threads_number=>3, :operation_system=>{"type"=>"mac", "version"=>10.11}}
+[2017-09-18 19:31:08] INFO ######Thread1
+[2017-09-18 19:31:35] INFO http://10.4.237.142:8000/get_schedule_scripts
+{:salve_name=>"CentOsSlave-CD-01", :ip=>"10.4.237.142", :platforms=>[{"type"=>"firefox", "version"=>"latest", "execute_cmd"=>"firefox"}, {"type"=>"chrome", "version"=>"latest", "execute_cmd"=>"chrome"}], :project_names=>["IronHide"], :threads_number=>3, :operation_system=>{"type"=>"mac", "version"=>10.11}}
+[2017-09-18 19:31:38] INFO ######Thread0
+[2017-09-18 19:32:05] INFO http://10.4.237.142:8000/get_schedule_scripts
+{:salve_name=>"CentOsSlave-CD-01", :ip=>"10.4.237.142", :platforms=>[{"type"=>"firefox", "version"=>"latest", "execute_cmd"=>"firefox"}, {"type"=>"chrome", "version"=>"latest", "execute_cmd"=>"chrome"}], :project_names=>["IronHide"], :threads_number=>3, :operation_system=>{"type"=>"mac", "version"=>10.11}}
+[2017-09-18 19:32:08] INFO ######Thread2
+[2017-09-18 19:32:35] INFO http://10.4.237.142:8000/get_schedule_scripts
+{:salve_name=>"CentOsSlave-CD-01", :ip=>"10.4.237.142", :platforms=>[{"type"=>"firefox", "version"=>"latest", "execute_cmd"=>"firefox"}, {"type"=>"chrome", "version"=>"latest", "execute_cmd"=>"chrome"}], :project_names=>["IronHide"], :threads_number=>3, :operation_system=>{"type"=>"mac", "version"=>10.11}}
+[2017-09-18 19:32:38] INFO ######Thread1
+[2017-09-18 19:33:05] INFO http://10.4.237.142:8000/get_schedule_scripts
+{:salve_name=>"CentOsSlave-CD-01", :ip=>"10.4.237.142", :platforms=>[{"type"=>"firefox", "version"=>"latest", "execute_cmd"=>"firefox"}, {"type"=>"chrome", "version"=>"latest", "execute_cmd"=>"chrome"}], :project_names=>["IronHide"], :threads_number=>3, :operation_system=>{"type"=>"mac", "version"=>10.11}}
+[2017-09-18 19:33:08] INFO ######Thread0
+[2017-09-18 19:33:35] INFO http://10.4.237.142:8000/get_schedule_scripts
+{:salve_name=>"CentOsSlave-CD-01", :ip=>"10.4.237.142", :platforms=>[{"type"=>"firefox", "version"=>"latest", "execute_cmd"=>"firefox"}, {"type"=>"chrome", "version"=>"latest", "execute_cmd"=>"chrome"}], :project_names=>["IronHide"], :threads_number=>3, :operation_system=>{"type"=>"mac", "version"=>10.11}}
+[2017-09-18 19:33:38] INFO ######Thread2
+[2017-09-18 19:34:05] INFO http://10.4.237.142:8000/get_schedule_scripts
+{:salve_name=>"CentOsSlave-CD-01", :ip=>"10.4.237.142", :platforms=>[{"type"=>"firefox", "version"=>"latest", "execute_cmd"=>"firefox"}, {"type"=>"chrome", "version"=>"latest", "execute_cmd"=>"chrome"}], :project_names=>["IronHide"], :threads_number=>3, :operation_system=>{"type"=>"mac", "version"=>10.11}}
+[2017-09-18 19:34:08] INFO ######Thread1
+[2017-09-18 19:34:36] INFO http://10.4.237.142:8000/get_schedule_scripts
+{:salve_name=>"CentOsSlave-CD-01", :ip=>"10.4.237.142", :platforms=>[{"type"=>"firefox", "version"=>"latest", "execute_cmd"=>"firefox"}, {"type"=>"chrome", "version"=>"latest", "execute_cmd"=>"chrome"}], :project_names=>["IronHide"], :threads_number=>3, :operation_system=>{"type"=>"mac", "version"=>10.11}}
+[2017-09-18 19:34:39] INFO ######Thread0
+[2017-09-18 19:35:06] INFO http://10.4.237.142:8000/get_schedule_scripts
+{:salve_name=>"CentOsSlave-CD-01", :ip=>"10.4.237.142", :platforms=>[{"type"=>"firefox", "version"=>"latest", "execute_cmd"=>"firefox"}, {"type"=>"chrome", "version"=>"latest", "execute_cmd"=>"chrome"}], :project_names=>["IronHide"], :threads_number=>3, :operation_system=>{"type"=>"mac", "version"=>10.11}}
+[2017-09-18 19:35:09] INFO ######Thread2
+[2017-09-18 19:35:36] INFO http://10.4.237.142:8000/get_schedule_scripts
+{:salve_name=>"CentOsSlave-CD-01", :ip=>"10.4.237.142", :platforms=>[{"type"=>"firefox", "version"=>"latest", "execute_cmd"=>"firefox"}, {"type"=>"chrome", "version"=>"latest", "execute_cmd"=>"chrome"}], :project_names=>["IronHide"], :threads_number=>3, :operation_system=>{"type"=>"mac", "version"=>10.11}}
+[2017-09-18 19:35:39] INFO ######Thread1
+[2017-09-18 19:36:06] INFO http://10.4.237.142:8000/get_schedule_scripts
+{:salve_name=>"CentOsSlave-CD-01", :ip=>"10.4.237.142", :platforms=>[{"type"=>"firefox", "version"=>"latest", "execute_cmd"=>"firefox"}, {"type"=>"chrome", "version"=>"latest", "execute_cmd"=>"chrome"}], :project_names=>["IronHide"], :threads_number=>3, :operation_system=>{"type"=>"mac", "version"=>10.11}}
+[2017-09-18 19:36:09] INFO ######Thread0
+[2017-09-18 19:36:36] INFO http://10.4.237.142:8000/get_schedule_scripts
+{:salve_name=>"CentOsSlave-CD-01", :ip=>"10.4.237.142", :platforms=>[{"type"=>"firefox", "version"=>"latest", "execute_cmd"=>"firefox"}, {"type"=>"chrome", "version"=>"latest", "execute_cmd"=>"chrome"}], :project_names=>["IronHide"], :threads_number=>3, :operation_system=>{"type"=>"mac", "version"=>10.11}}
+[2017-09-18 19:36:39] INFO ######Thread2
+[2017-09-18 19:37:06] INFO http://10.4.237.142:8000/get_schedule_scripts
+{:salve_name=>"CentOsSlave-CD-01", :ip=>"10.4.237.142", :platforms=>[{"type"=>"firefox", "version"=>"latest", "execute_cmd"=>"firefox"}, {"type"=>"chrome", "version"=>"latest", "execute_cmd"=>"chrome"}], :project_names=>["IronHide"], :threads_number=>3, :operation_system=>{"type"=>"mac", "version"=>10.11}}
+[2017-09-18 19:37:09] INFO ######Thread1
+[2017-09-18 19:37:36] INFO http://10.4.237.142:8000/get_schedule_scripts
+{:salve_name=>"CentOsSlave-CD-01", :ip=>"10.4.237.142", :platforms=>[{"type"=>"firefox", "version"=>"latest", "execute_cmd"=>"firefox"}, {"type"=>"chrome", "version"=>"latest", "execute_cmd"=>"chrome"}], :project_names=>["IronHide"], :threads_number=>3, :operation_system=>{"type"=>"mac", "version"=>10.11}}
+[2017-09-18 19:37:39] INFO ######Thread0
+[2017-09-18 19:38:06] INFO http://10.4.237.142:8000/get_schedule_scripts
+{:salve_name=>"CentOsSlave-CD-01", :ip=>"10.4.237.142", :platforms=>[{"type"=>"firefox", "version"=>"latest", "execute_cmd"=>"firefox"}, {"type"=>"chrome", "version"=>"latest", "execute_cmd"=>"chrome"}], :project_names=>["IronHide"], :threads_number=>3, :operation_system=>{"type"=>"mac", "version"=>10.11}}
+[2017-09-18 19:38:09] INFO ######Thread2
+[2017-09-18 19:38:36] INFO http://10.4.237.142:8000/get_schedule_scripts
+{:salve_name=>"CentOsSlave-CD-01", :ip=>"10.4.237.142", :platforms=>[{"type"=>"firefox", "version"=>"latest", "execute_cmd"=>"firefox"}, {"type"=>"chrome", "version"=>"latest", "execute_cmd"=>"chrome"}], :project_names=>["IronHide"], :threads_number=>3, :operation_system=>{"type"=>"mac", "version"=>10.11}}
+[2017-09-18 19:38:39] INFO ######Thread1
+[2017-09-18 19:39:06] INFO http://10.4.237.142:8000/get_schedule_scripts
+{:salve_name=>"CentOsSlave-CD-01", :ip=>"10.4.237.142", :platforms=>[{"type"=>"firefox", "version"=>"latest", "execute_cmd"=>"firefox"}, {"type"=>"chrome", "version"=>"latest", "execute_cmd"=>"chrome"}], :project_names=>["IronHide"], :threads_number=>3, :operation_system=>{"type"=>"mac", "version"=>10.11}}
+[2017-09-18 19:39:09] INFO ######Thread0
+[2017-09-18 19:39:57] INFO ######Thread1
+[2017-09-18 19:39:57] INFO http://10.4.237.142:8000/get_schedule_scripts
+{:salve_name=>"CentOsSlave-CD-01", :ip=>"10.4.237.142", :platforms=>[{"type"=>"firefox", "version"=>"latest", "execute_cmd"=>"firefox"}, {"type"=>"chrome", "version"=>"latest", "execute_cmd"=>"chrome"}], :project_names=>["IronHide"], :threads_number=>3, :operation_system=>{"type"=>"mac", "version"=>10.11}}
+[2017-09-18 19:39:57] INFO ######Thread0
+[2017-09-18 19:39:57] INFO ######Thread2
+[2017-09-18 19:40:00] INFO [{"branch_name":"master","deleted":true,"env_name":"QA","exec_cmd":"rspec","exec_path":"git/ironhide-rubytest/testing/op_center","id":61009,"ip":"10.4.237.142","platform":"chrome","project_name":"IronHide","script_name":"op_center_sign_in","script_result_id":796997,"source_cmd":"git","source_path":"[{\"local\":\"git/ironhide-rubytest\",\"remote\":\"git@git.istuary.com:ironhide/ironhide-rubytest.git\"}]","test_round_id":48687,"timeout_limit":1200}]
+[2017-09-18 19:40:30] INFO http://10.4.237.142:8000/get_schedule_scripts
+{:salve_name=>"CentOsSlave-CD-01", :ip=>"10.4.237.142", :platforms=>[{"type"=>"firefox", "version"=>"latest", "execute_cmd"=>"firefox"}, {"type"=>"chrome", "version"=>"latest", "execute_cmd"=>"chrome"}], :project_names=>["IronHide"], :threads_number=>3, :operation_system=>{"type"=>"mac", "version"=>10.11}}
+[2017-09-18 19:40:33] INFO ######Thread1
+[2017-09-18 19:40:35] INFO []
+[2017-09-18 19:41:05] INFO http://10.4.237.142:8000/get_schedule_scripts
+{:salve_name=>"CentOsSlave-CD-01", :ip=>"10.4.237.142", :platforms=>[{"type"=>"firefox", "version"=>"latest", "execute_cmd"=>"firefox"}, {"type"=>"chrome", "version"=>"latest", "execute_cmd"=>"chrome"}], :project_names=>["IronHide"], :threads_number=>3, :operation_system=>{"type"=>"mac", "version"=>10.11}}
+[2017-09-18 19:41:08] INFO ######Thread0
+[2017-09-18 19:41:11] INFO []
+[2017-09-18 19:41:41] INFO http://10.4.237.142:8000/get_schedule_scripts
+{:salve_name=>"CentOsSlave-CD-01", :ip=>"10.4.237.142", :platforms=>[{"type"=>"firefox", "version"=>"latest", "execute_cmd"=>"firefox"}, {"type"=>"chrome", "version"=>"latest", "execute_cmd"=>"chrome"}], :project_names=>["IronHide"], :threads_number=>3, :operation_system=>{"type"=>"mac", "version"=>10.11}}
+[2017-09-18 19:41:44] INFO ######Thread2
+[2017-09-18 19:41:46] INFO []
+[2017-09-18 19:42:16] INFO http://10.4.237.142:8000/get_schedule_scripts
+{:salve_name=>"CentOsSlave-CD-01", :ip=>"10.4.237.142", :platforms=>[{"type"=>"firefox", "version"=>"latest", "execute_cmd"=>"firefox"}, {"type"=>"chrome", "version"=>"latest", "execute_cmd"=>"chrome"}], :project_names=>["IronHide"], :threads_number=>3, :operation_system=>{"type"=>"mac", "version"=>10.11}}
+[2017-09-18 19:42:19] INFO ######Thread1
+[2017-09-18 19:42:22] INFO []
+[2017-09-18 19:42:52] INFO http://10.4.237.142:8000/get_schedule_scripts
+{:salve_name=>"CentOsSlave-CD-01", :ip=>"10.4.237.142", :platforms=>[{"type"=>"firefox", "version"=>"latest", "execute_cmd"=>"firefox"}, {"type"=>"chrome", "version"=>"latest", "execute_cmd"=>"chrome"}], :project_names=>["IronHide"], :threads_number=>3, :operation_system=>{"type"=>"mac", "version"=>10.11}}
+[2017-09-18 19:42:55] INFO ######Thread0
+[2017-09-18 19:42:57] INFO []
+[2017-09-18 19:43:27] INFO http://10.4.237.142:8000/get_schedule_scripts
+{:salve_name=>"CentOsSlave-CD-01", :ip=>"10.4.237.142", :platforms=>[{"type"=>"firefox", "version"=>"latest", "execute_cmd"=>"firefox"}, {"type"=>"chrome", "version"=>"latest", "execute_cmd"=>"chrome"}], :project_names=>["IronHide"], :threads_number=>3, :operation_system=>{"type"=>"mac", "version"=>10.11}}
+[2017-09-18 19:43:30] INFO ######Thread2
+[2017-09-18 19:43:30] INFO []
+[2017-09-18 19:44:00] INFO http://10.4.237.142:8000/get_schedule_scripts
+{:salve_name=>"CentOsSlave-CD-01", :ip=>"10.4.237.142", :platforms=>[{"type"=>"firefox", "version"=>"latest", "execute_cmd"=>"firefox"}, {"type"=>"chrome", "version"=>"latest", "execute_cmd"=>"chrome"}], :project_names=>["IronHide"], :threads_number=>3, :operation_system=>{"type"=>"mac", "version"=>10.11}}
+[2017-09-18 19:44:03] INFO ######Thread1
+[2017-09-18 19:44:04] INFO []

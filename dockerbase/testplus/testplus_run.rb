@@ -1,11 +1,12 @@
 require 'yaml'
 require 'thread'
-#require './testplus/logger.rb'
-require './testplus/config.rb'
+require_relative 'config'
 
 #Dir[File.dirname(__FILE__) + '/**/*.rb'].each {|file| require file if file!="./"<<__FILE__}
 #Dir[File.dirname(__FILE__) + '/library/*/**/*.rb'].each {|file| require file if file!="./"<<__FILE__}
-$logger = Testplus::Log.new("#{File.dirname(__FILE__)}/log/testplus-slave-#{Time.now.strftime("%Y-%m-%d")}.log")
+path = "#{File.dirname(__FILE__)}/log"
+Dir.mkdir path if not File.exist? path
+$logger = Testplus::Log.new("#{path}/testplus-slave-#{Time.now.strftime("%Y-%m-%d")}.log")
 $queue = Queue.new
 $global_status = true
 
@@ -19,8 +20,10 @@ def get_push_queue
     :threads_number=>$testplus_config['threads_number'],
     :operation_system=>$testplus_config['operation_system']}
   url = "#{$testplus_config['web_server']}/get_schedule_scripts"
-  hash_results = JSON.parse(RestClient.post(url,data))
-  $logger.info hash_results
+  $logger.info("#{url}\n#{data}") 
+  result = RestClient.post(url,data) 
+  hash_results = JSON.parse(result.body) rescue result.body
+  $logger.info(hash_results)
   (hash_results||[]).each do |hash_result|
     temp_schedule_script = TempScheduleScript.new(hash_result)
     script_task = ScriptTask.new(temp_schedule_script)
@@ -46,7 +49,8 @@ $testplus_config['threads_number'].to_i.times.each do |i|
           # loop server
           if $queue.empty? && $global_status
             sleep(30)
-          $global_status = true
+            $logger = Testplus::Log.new("#{path}/testplus-slave-#{Time.now.strftime("%Y-%m-%d")}.log")
+            $global_status = true
           end
         end
         sleep(3)
