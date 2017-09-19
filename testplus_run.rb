@@ -1,7 +1,9 @@
 require 'yaml'
 require 'thread'
+#require './testplus/logger.rb'
+require './testplus/config.rb'
 
-Dir[File.dirname(__FILE__) + '/**/*.rb'].each {|file| require file if file!="./"<<__FILE__}
+#Dir[File.dirname(__FILE__) + '/**/*.rb'].each {|file| require file if file!="./"<<__FILE__}
 #Dir[File.dirname(__FILE__) + '/library/*/**/*.rb'].each {|file| require file if file!="./"<<__FILE__}
 $logger = Testplus::Log.new("#{File.dirname(__FILE__)}/log/testplus-slave-#{Time.now.strftime("%Y-%m-%d")}.log")
 $queue = Queue.new
